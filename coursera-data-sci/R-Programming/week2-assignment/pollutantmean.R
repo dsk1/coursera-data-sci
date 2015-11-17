@@ -24,24 +24,26 @@
         ## NOTE: Do not round the result!
 #}
 
-#######################################################################
+################### Part 1 ##################
 
 
-pullutantmean <- function(directory, pollutant, id = 1:332){
+pollutantmean <- function(directory, pollutant, id = 1:332){
         
         pollutdata <- numeric()
         
-        for(i in seq_along(id)){
+        for(i in id){
                 
                 # create filepath
                 monitorname <- formatC(i, flag = 0, width = 3)
                 filepath <- paste0(directory, "/", monitorname, ".csv")
-                
+
                 # load into dataframe object
                 dframe <- read.csv(filepath)
-                
+
                 pollutdata <- c(pollutdata, dframe[[pollutant]])
         }
-        mean(df$pollutant, na.rm = TRUE)
+        round(mean(pollutdata, na.rm = TRUE), digits = 3)
 }
 
+
+################### Part 2 ##################
