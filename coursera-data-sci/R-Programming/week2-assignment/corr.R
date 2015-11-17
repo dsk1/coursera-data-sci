@@ -1,60 +1,38 @@
-# Write a function that takes a directory of data files and a threshold for complete cases 
-# and calculates the correlation between sulfate and nitrate for monitor locations 
-# where the number of completely observed cases (on all variables) is greater than the threshold. 
-# The function should return a vector of correlations for the monitors that meet 
-# the threshold requirement. 
-# If no monitors meet the threshold requirement, then the function should return a numeric vector 
-# of length 0. 
-# A prototype of this function follows
-#
-# corr <- function(directory, threshold = 0) {
-        ## 'directory' is a character vector of length 1 indicating
-        ## the location of the CSV files
-        
-        ## 'threshold' is a numeric vector of length 1 indicating the
-        ## number of completely observed observations (on all
-        ## variables) required to compute the correlation between
-        ## nitrate and sulfate; the default is 0
-        
-        ## Return a numeric vector of correlations
-        ## NOTE: Do not round the result!
-# }
-
 corr <- function(directory, threshold = 0){
         
         correlations <- numeric()
         
-        # construct the directory path
-        directorypath <- paste0(getwd(), "/", directory, "/")
+        #list.files(dirpath, pattern = "*.csv")
         
-        # create a list of csv filenames
-        fileslist <- list.files(directorypath, pattern = "*.csv")
+        #  create a dataframe of file id and number of complete cases in each file
+        #  use the complete() function created in previous exercise
+        compnobs.df <- complete(directory)
         
-        # loop through the list of files
-        for(i in length(fileslist)){
+        # verify the nobs with the threshold and create a "good" data frame
+        good.df <- compnobs.df[compnobs.df$nobs > threshold, ]
+        
+        # derive a vector of good ids
+        good.ids <- good.df$id
+        
+        # loop through the good ids vector and read the corresponding file
+        dirpath <- paste0(getwd(), "/", directory, "/")
+        
+        for(i in good.ids) {
                 
-                # read file into a data frame
-                tempdframe <- read.csv(paste0(directorypath, fileslist[i])) 
+                # construct the file name and read file into data frame
+                temp.df <- read.csv(paste0(dirpath, formatC(i, width = 3, flag = 0), ".csv"))    
                 
-                # derive a dataframe of complete case observations
-                cmpdframe <- tempdframe[complete.cases(tempdframe), ] 
+                # derive complete case data frame
+                compcase.df <- temp.df[complete.cases(temp.df), ]
                 
-                # calculate total number of complete case observations
-                cmpobs <- sum(complete.cases(tempdframe)) 
+                # derive sulfates and nitrates vectors from complete case observations
+                sulf.vector <- compcase.df$sulfate
+                nitr.vector <- compcase.df$nitrate
                 
-                # if the number of complete observations meet threshold
-                # then compute correlation
-                if(cmpobs > threshold){
-                        
-                        # create sulfate and nitrate vectors from the complete case observations data frame
-                        sulfatevector <- cmpdframe$sulfate
-                        nitratevector <- cmpdframe$nitrate
-                        
-                        # create a vector of correlations
-                        correlations <- c(correlations, cor(sulfatevector, nitratevector))
-                }
-
+                # calculate correlations and create a vector
+                correlations <- c(correlations, cor(sulf.vector, nitr.vector))
         }
-        # return the correlations vector
+                
         correlations
+        
 }

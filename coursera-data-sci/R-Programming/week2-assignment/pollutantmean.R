@@ -45,5 +45,3 @@ pollutantmean <- function(directory, pollutant, id = 1:332){
         round(mean(pollutdata, na.rm = TRUE), digits = 3)
 }
 
-
-################### Part 2 ##################
