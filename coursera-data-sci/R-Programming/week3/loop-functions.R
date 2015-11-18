@@ -188,11 +188,3 @@ str(split(x, list(f1, f2)))
 # Returns only those with values
 str(split(x, list(f1, f2), drop = TRUE))
 
-
-
-
-
-
-
-
-
