@@ -35,8 +35,7 @@ lapply(x, function(elt) elt[ , 1])
 
 ## sapply
 # Returns vector if length of each element in the result list is 1
-# Returns matix if the result is a list where every element is a vector 
-# of same length
+# Returns matix if the result is a list where every element is a vector of same length
 # Returns list if it can't figure things out.
 sapply(x, function(elt) elt[1, ]) # Returns matrix. two rows
 
@@ -122,11 +121,12 @@ list(
         noise(5, 5, 2)
 )
 
-# tapply() to factor(categorize) vectors based 
+# tapply() to factor or categorize vectors based 
 # on a factor vector
 x <- c(rnorm(10), runif(10), rnorm(10,1))
+x
 f <- gl(3,10)
-
+f
 tapply(x, f, mean)
 
 tapply(x, f, mean, simplify = FALSE)
