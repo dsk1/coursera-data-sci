@@ -10,3 +10,4 @@ hilbert <- function(n){
 
 x <- hilbert(1000)
 system.time(svd(x))
+?svd()
