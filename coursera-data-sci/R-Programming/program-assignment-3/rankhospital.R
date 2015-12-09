@@ -1,6 +1,6 @@
 setwd("C:/RWDir/coursera-data-sci/R-Programming/program-assignment-3")
 
-best <- function(state, outcome, num = "best") {
+rankhospital <- function(state, outcome, num = "best") {
         ## Read outcome data
         hospDf <- read.csv("outcome-of-care-measures.csv", na.strings="Not Available", stringsAsFactors=FALSE)
 

@@ -51,5 +51,4 @@ best <- function(state, outcome) {
         ## i.e return the best hospital
         
         stateDf[bestHosp, ]$hospital
-        
 }
