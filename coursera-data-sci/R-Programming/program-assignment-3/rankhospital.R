@@ -1,13 +1,9 @@
 setwd("C:/RWDir/coursera-data-sci/R-Programming/program-assignment-3")
 
-best <- function(state, outcome) {
+rankhospital <- function(state, outcome, num = "best") {
         ## Read outcome data
         hospDf <- read.csv("outcome-of-care-measures.csv", na.strings="Not Available", stringsAsFactors=FALSE)
-        
-#         hospDf[ ,11] <- as.numeric(hospDf[ ,11])
-#         hospDf[ ,17] <- as.numeric(hospDf[ ,17])
-#         hospDf[ ,23] <- as.numeric(hospDf[ ,23])
-        
+
         ## Check that state and outcome are valid
         valid.outcomes <- c("heart attack", "heart failure", "pneumonia")
         valid.states <- unique(hospDf[,"State"])
@@ -43,12 +39,23 @@ best <- function(state, outcome) {
         # Derive a data frame for the Sate
         stateDf <- subsetDf[subsetDf$state == state, ]
         
-        # The last hospital is the worst hospital in the state
-        worstHosp <- nrow(stateDf)
-        bestHosp <- 1
+        # if num is best then take the first row
+        # if num is not worst take the last row
+        # if num is greater than number of rows for the state or if its not 
+        #       integer then return NA
+        # otherwise take the num'th row
         
-        ## Return the hospital in that state with lowest 30-day death 
-        ## i.e return the best hospital
+        if(num == "best")
+                retRow <- 1
+        else if(num == "worst")
+                retRow <- nrow(stateDf)
+        else if (num > nrow(stateDf))
+                return(NA)
+        else
+                retRow <- num
         
-        stateDf[bestHosp, ]$hospital
+        
+        ## Return the hospital from the row taken above
+        stateDf[retRow, ]$hospital
+        
 }

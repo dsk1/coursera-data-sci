@@ -61,6 +61,7 @@ sapply(s, mean) # reformat
 
 s <- split(mtcars, mtcars$cyl)
 
+# how to get mean mpg group by cylinders
 lapply(s, function(x) colMeans(x[, c("mpg", "hp")], na.rm = TRUE )) # incorrect
 sapply(s, function(x) colMeans(x[, c("mpg", "hp")], na.rm = TRUE )) # incorrect
 
