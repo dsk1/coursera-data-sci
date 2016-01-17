@@ -6,6 +6,9 @@
 install.packages("RMySQL")
 library(RMySQL)
 
+<<<<<<< HEAD
+
+=======
 ucscDb <- dbConnect(MySQL(), user= "genome", host = "genome-mysql.cse.ucsc.edu")
 result <- dbGetQuery(ucscDb, "show databases;"); dbDisconnect(ucscDb);
 head(result)
@@ -31,3 +34,4 @@ affyMis <- fetch(query); quantile(affyMis$misMatches)
 affyMisSmall <- fetch(query, n= 10); dbClearResult(query)
 affyMisSmall
 dbDisconnect(hg19)
+>>>>>>> e2205ae92364b7d5084df95749638695c0360a9d
