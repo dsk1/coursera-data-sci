@@ -70,8 +70,8 @@ head(pm1)
 x1 <- pm1$Sample.Value
 str(x1)
 # see sample.value for both years
-summary(x1)
 summary(x0)
+summary(x1) # why is there -ve data?
 
 # about 5% are missing
 mean(is.na(x0))
@@ -81,3 +81,57 @@ mean(is.na(x1))
 boxplot(x0, x1)
 
 boxplot(log10(x0), log10(x1))
+
+# pluck out the negative values and see what we can tell
+negative1 <- x1 < 0
+sum(negative1, na.rm = TRUE)
+sum(x1) # 26K
+mean(negative1, na.rm = TRUE) # only 2%
+
+# lets take a look at the other values of negative values
+# for example when are these -ve values occuring?
+# lets look at the date variable.
+# 
+
+str(pm1$Date)
+dates1 <- pm1$Date
+dates1 <- as.Date(as.character(dates1), "%Y%m%d" )
+str(dates1)
+
+# just take a look at the histogram of data around months
+hist(dates1, "month")
+
+# take a look at where the -ve values are occuring 
+hist(dates1[negative1], "month") # lot of -ves in dec, jan, feb timeframe
+
+# investigate the -ve values later as it is only 2% of the total data
+
+##### analyze the pollution at one location #####
+# pick out on monitor thats there in 1999 and 2012 and compare the two
+# pick out the distinct counties and sites in New York state
+
+site0 <- unique(subset(pm0, State.Code == 36, c(County.Code, Site.ID)) )
+site1 <- unique(subset(pm1, State.Code == 36, c(County.Code, Site.ID)) )
+
+site0 <- paste(site0[,1], site0[,2], sep = ".")
+site1 <- paste(site1[,1], site1[,2], sep = ".")
+
+head(site0)
+head(site1)
+
+str(site0) # 33 monitors
+str(site1) # 18 monitors
+
+intersect(site0, site1)
+
+bothyrmonitor <- intersect(site0, site1)
+
+bothyrmonitor
+
+# pick out one monitor/site's data from both years in NY
+# first create the county.site column in pm data
+pm0$county.site <- with(pm0, paste(County.Code, Site.ID, sep = "."))
+pm1$county.site <- with(pm1, paste(County.Code, Site.ID, sep = "."))
+
+# pickout the data that is for the monitory in bothyrsmonitor
+
