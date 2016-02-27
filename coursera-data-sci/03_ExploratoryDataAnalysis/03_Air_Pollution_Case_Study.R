@@ -201,20 +201,29 @@ str(pm1dates)
 
 # plot the data
 plot(pm0dates, pm0mtr)
+plot(pm1dates, pm1mtr)
 
-sort(unique(site0sub$county.site))
-sort(bothyrmtrs)
+par(mfrow = c(1,2), mar = c(4,4,2,1))
+plot(pm0dates, pm0mtr, pch=20)
+abline(h=median(pm0mtr, na.rm = TRUE))
+plot(pm1dates, pm1mtr, pch=20)
+abline(h=median(pm1mtr, na.rm = TRUE))
 
-plot(site0sub$Date, site0sub$Sample.Value)
-plot(site0sub$Date, site0sub$Sample.Value)
+# Since the two year's data is in different ranges, fix it and plot them
+# find the range of data
+range(pm0mtr, pm1mtr, na.rm = T)
+rng <- range(pm0mtr, pm1mtr, na.rm = T)
+par(mfrow=c(1,2), mar = c(4,4,2,1))
 
-dates0 <- as.Date(as.character(site0sub$Date), "%Y%m%d")
-x0sub <- site0sub$Sample.Value
+plot(pm0dates, pm0mtr, pch=20, ylim = rng)
+abline(h = median(pm0mtr, na.rm = T))
 
-dates1 <- as.Date(as.character(site1sub$Date), "%Y%m%d")
-x1sub <- site1sub$Sample.Value
+plot(pm1dates, pm1mtr, pch=20, ylim = rng)
+abline(h = median(pm1mtr, na.rm = T))
 
-plot(dates0, x0sub)
-plot(dates1, x1sub)
+# do another analysis
+# compare avg of each state in two years
+head(pm0)
+str(pm0)
 
-
+sapply(split(pm0, pm0$State.Code), avg(pm0$Sample.Value))
