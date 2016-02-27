@@ -140,7 +140,7 @@ hist(dates1[negative1], "month") # lot of -ves in dec, jan, feb timeframe
 subset(pm0, State.Code ==36)
 subset(pm1, State.Code ==36)
 
-# create a vectore of the subset data
+# create a vector of the subset data
 site0 <- unique(subset(pm0, State.Code == 36, c(County.Code, Site.ID)) )
 site1 <- unique(subset(pm1, State.Code == 36, c(County.Code, Site.ID)) )
 
@@ -168,16 +168,53 @@ pm1$county.site <- with(pm1, paste(County.Code, Site.ID, sep = "."))
 
 
 # pickout the data that is for the monitor in bothyrsmonitor
-pm0sub <- subset(pm0, county.site %in% bothyrmtrs)
-pm1sub <- subset(pm1, county.site %in% bothyrmtrs)
+site0sub <- subset(pm0, county.site %in% bothyrmtrs)
+site1sub <- subset(pm1, county.site %in% bothyrmtrs)
 # check the subset data
-str(pm0sub)
-dim(pm0sub)
+str(site0sub)
+head(site0sub)
 
-# compare the county.site values to the bothyrmtrs vector
-sort(unique(pm0sub$county.site))
+#pick a monitor that has the most readings in each year
+# see how many readings are there at each monitor
+split(site0sub, site0sub$county.site)
+sapply(split(site0sub, site0sub$county.site), nrow)
+sapply(split(site1sub, site1sub$county.site), nrow)
+
+# pick county.site = 63.2008
+mtr <- 63.2008
+mtr0 <- subset(site0sub, county.site %in% mtr)
+dim(mtr0)
+mtr1 <- subset(site1sub, county.site %in% mtr)
+dim(mtr1)
+
+# compare pm2.5 values in both years at this monitor
+# get the pm2.5 data out for y axis
+pm0mtr <- mtr0$Sample.Value
+pm1mtr <- mtr1$Sample.Value
+length(pm0mtr)
+
+# get the dates for x axis
+pm0dates <- as.Date(as.character(mtr0$Date), "%Y%m%d")
+str(pm0dates)
+pm1dates <- as.Date(as.character(mtr1$Date), "%Y%m%d")
+str(pm1dates)
+
+# plot the data
+plot(pm0dates, pm0mtr)
+
+sort(unique(site0sub$county.site))
 sort(bothyrmtrs)
 
+plot(site0sub$Date, site0sub$Sample.Value)
+plot(site0sub$Date, site0sub$Sample.Value)
 
+dates0 <- as.Date(as.character(site0sub$Date), "%Y%m%d")
+x0sub <- site0sub$Sample.Value
+
+dates1 <- as.Date(as.character(site1sub$Date), "%Y%m%d")
+x1sub <- site1sub$Sample.Value
+
+plot(dates0, x0sub)
+plot(dates1, x1sub)
 
 
