@@ -226,4 +226,50 @@ abline(h = median(pm1mtr, na.rm = T))
 head(pm0)
 str(pm0)
 
-sapply(split(pm0, pm0$State.Code), avg(pm0$Sample.Value))
+#### example of tapply() ####
+rnorm(10)
+x <- c(rnorm(10), runif(10), rnorm(10, 1))
+f <- gl(3, 10)
+x
+f
+tapply(x, f, mean)
+
+##### Create a vector of state averages.
+mn0 <- with(pm0, tapply(Sample.Value, State.Code, mean, na.rm = T))
+str(mn0)
+summary(mn0)
+
+mn1 <- with(pm1, tapply(Sample.Value, State.Code, mean, na.rm = T))
+str(mn1)
+summary(mn1)
+
+##### create 2 data frames of the two years' vectors
+d0 <- data.frame(state = names(mn0), meanpm = mn0)
+d1 <- data.frame(state = names(mn1), meanpm = mn1)
+
+##### merge the 2 data frames into one dataframe on state
+mrg <- merge(d0, d1, by = "state")
+dim(mrg)
+head(mrg)
+str(mrg)
+
+## plot
+par(mfrow=c(1,1))
+with(mrg, plot(rep(1999,52), mrg[,2], xlim = c(1998,2013)))
+# create points on the above plot instead of creating a new plot
+with(mrg, points(rep(2012,52), mrg[,3], xlim = c(1998,2013)))
+
+# draw a line between the two years' data
+segments(rep(1999,52), mrg[,2], rep(2012,52), mrg[,3])
+?segments
+
+rep(1999, 52)
+
+# swirl exercise
+# Explorator Data Analysis: 1.CaseStudy
+library(swirl)
+ls()
+rm(list = ls())
+ls()
+swirl
+swirl()
